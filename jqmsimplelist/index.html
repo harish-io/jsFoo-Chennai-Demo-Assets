@@ -1,0 +1,72 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jQuery Mobile Web App</title>
+<link href="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.css" rel="stylesheet" type="text/css"/>
+<script src="http://code.jquery.com/jquery-1.5.min.js" type="text/javascript"></script>
+<script src="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.js" type="text/javascript"></script>
+<script src="iscroll.js" type="text/javascript"></script>
+<script>
+$(document).ready(function(e)
+{
+	console.log("ready");
+	init();
+});
+function init()
+{
+	myScroll = new iScroll('wrapper');
+	getTweets()
+	/*myScroll = new iScroll('wrapper');
+	var list;
+	for(var i=0; i<56; i++)
+	{
+		var html = "<li>item"+i+"</li>";
+		list = $("#mylist");
+		list.append(html);
+	}
+	list.listview('refresh');
+	*/
+
+}
+function getTweets()
+{
+	$.ajax
+	(
+		{
+			type: "post",
+			url: "http://search.twitter.com/search.json?q=jquery mobile",
+			data : "callback",
+			dataType: "jsonp",
+			success : function(result)
+			{
+				console.log("success");
+				var list = $("#mylist");
+				var results = result.results;
+				for(i=0; i<results.length; i++)
+				{
+					list.append("<li><img src='"+results[i].profile_image_url+"'></img><h3>"+results[i].from_user_name+"<h3><h3>"+results[i].text+"</h3></li></div>");
+				}
+				list.listview("refresh");
+			}
+		}
+
+	)
+}
+</script>
+</head> 
+<body> 
+<div data-role="page" id="page">
+	<div data-role="header">
+		<h1>Simple List</h1>
+	</div>
+	<div data-role="content" id="wrapper">	
+		<ul id="mylist" data-role="listview">
+	
+		</ul>
+	</div>
+	<div data-role="footer">
+		<h4>@hsivaram</h4>
+	</div>
+</div>
+</body>

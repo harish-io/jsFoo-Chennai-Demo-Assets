@@ -1,0 +1,31 @@
+.avatar
+{
+	position: absolute;
+	left:10px;
+}
+.tweet-content
+{
+	display: block;
+}
+.tweet-content p
+{
+	font-size:60%;
+}
+.tweet
+{
+	display: block;
+	height:80px;
+}
+#tweetheading
+{
+	position: absolute;
+	font-family: 'Alegreya', serif;
+	font-weight:bold;
+	left:50px;
+	top:-5px;
+}
+#tweettext
+{
+	margin-top: -30px;
+	margin-left: 50px;
+}

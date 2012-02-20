@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Demo 1</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script src="lib/easel.js"></script>
+<script src="jquery.js"></script>
+<script src="Tween.js"></script>
+<script>
+var canvas;
+var stage;
+var bitmap;
+var g;
+var items;
+var xpos = 0;
+var scalingobjects;
+var caps;
+var ploty = 0;
+var plots;
+var plottingcomplete = false;
+$(document).ready(function(e)
+{
+	init();
+})
+function init()
+{
+	canvas = document.getElementById("canvas");
+	var p = $("#chartHolder");
+	canvas.width = p.width();
+	canvas.height = p.height();
+
+	stage = new Stage(canvas);
+
+	Ticker.setFPS(100);
+	Ticker.addListener(window);
+	createDummyData();
+	addItems();
+	drawLines();
+	dropPlotPoints();
+}
+function dropPlotPoints()
+{
+	plottingcomplete = false;
+	for (var i = 0; i < plots.length; i++) 
+	{
+		var clip = plots[i].clip;
+		var t = plots[i].topos;
+		Tween.get(clip).to({x:clip.x, y:t}, 100*(Math.random()*i));
+	};
+	plottingcomplete = true;
+
+}
+function drawLines()
+{
+	g = new Graphics();
+	g.setStrokeStyle(2);
+	g.beginStroke(Graphics.getRGB(249,225,142));
+	var s = new Shape(g);
+	s.width = 560;
+	s.height = 420;
+	stage.addChild(s);
+}
+
+function addItems()
+{
+	scalingobjects = new Array();
+	caps = new Array();
+	plots = new Array();
+	for (var i = 0; i < items.length; i++)
+	 {
+	 	var image = new Image();
+	 	image.src = "img/bottom.png";
+	 	bitmap = new Bitmap(image);
+	 	stage.addChild(bitmap);
+	 	bitmap.x = (xpos + 30) * i;
+	 	bitmap.y = 300;
+
+	 	var image = new Image();
+	 	image.src = "img/scale.png";
+	 	bitmap = new Bitmap(image);
+	 	stage.addChild(bitmap);
+	 	scalingobjects.push({clip:bitmap});
+	 	bitmap.x = (xpos + 30) * i;
+	 	bitmap.y = 300;
+
+	 	var image = new Image();
+	 	image.src = "img/cap.png";
+	 	bitmap = new Bitmap(image);
+	 	stage.addChild(bitmap);
+	 	bitmap.x = (xpos + 30) * i;
+	 	bitmap.y = 300;
+	 	caps.push(bitmap);
+
+	 	var image = new Image();
+	 	image.src = "img/plot.png";
+	 	bitmap = new Bitmap(image);
+	 	stage.addChild(bitmap);
+	 	bitmap.x = 5 + (xpos + 30) * i;
+	 	bitmap.y = ploty;
+	 	var t = 300 - Math.round(Math.random()*100);
+	 	plots.push({clip:bitmap, topos:t});
+	 	ploty -= 40;
+	};
+	stage.update();
+}
+function createDummyData()
+{
+	items = new Array();
+	for(var i=0; i<16; i++)
+	{
+		var o = {item:"item"+i, toScale:(Math.round(Math.random()*10)*3)};
+		items.push(o);
+	}
+}
+function tick()
+{
+	for (var i = 0; i < scalingobjects.length; i++) 
+	{
+		var clip = scalingobjects[i].clip;
+		var cap = caps[i];
+		clip.regY = 6.7;
+		if(clip.scaleY < items[i].toScale)
+		{
+			clip.scaleY += 0.5;
+		}
+		else if(clip.scaleY > items[i].toScale)
+		{
+			clip.scaleY -= 0.5;
+		}
+		cap.y = 300 - (clip.scaleY * 7);
+
+	};
+	if(plottingcomplete)
+	{
+		g.clear();
+		g.setStrokeStyle(2);
+		g.beginStroke(Graphics.getRGB(249,225,142));
+		traceLocations();
+	}
+	stage.update();
+}
+function traceLocations()
+{
+	for(var i=0; i<plots.length; i++)
+	{
+		g.lineTo(plots[i].clip.x+8, plots[i].clip.y+7);
+	}
+}
+
+</script>
+</head>
+<body>
+	<div id="holder">
+		<div id="chartHolder">
+			<canvas id="canvas"></canvas>
+		</div>
+	</div>
+</body>

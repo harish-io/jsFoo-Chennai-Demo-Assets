@@ -1,0 +1,43 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jQuery Mobile Web App</title>
+<link href="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.css" rel="stylesheet" type="text/css"/>
+<script src="http://code.jquery.com/jquery-1.5.min.js" type="text/javascript"></script>
+<script src="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.js" type="text/javascript"></script>
+<script src="iscroll.js" type="text/javascript"></script>
+<script>
+$(document).ready(function(e)
+{
+	init();
+});
+function init()
+{
+	var list = $("#mylist");
+
+	for (var i = 0; i < 10; i++) 
+	{
+		var str = "<li>item "+i+"</li>";
+		list.append(str);
+	};
+	list.listview("refresh");
+}
+</script>
+<body>
+
+<div data-role="page" id="page" data-theme="b">
+	<div data-role="header">
+		<h1>Simple List</h1>
+	</div>
+	<div data-role="content" id="wrapper">	
+		<ul id="mylist" data-role="listview">
+			
+		</ul>
+	</div>
+	<div data-role="footer">
+		<h4>@hsivaram</h4>
+	</div>
+</div>
+
+</body>
